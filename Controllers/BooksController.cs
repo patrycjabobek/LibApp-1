@@ -65,7 +65,7 @@ namespace LibApp.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken()]
         public IActionResult Save(Book book)
         {
             if (book.Id == 0)
