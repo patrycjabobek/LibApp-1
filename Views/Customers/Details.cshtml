@@ -12,4 +12,8 @@
     {
         <li>Birthdate: @Model.Birthdate.Value.ToShortDateString()</li>
     }
+    @if (User.Identity.IsAuthenticated)
+    {
+        <a class="btn btn-primary" href="/customers/edit/@Model.Id">Edit User: @Model.Name</a>
+}
 </ul>

@@ -66,7 +66,7 @@ namespace LibApp.Controllers.Api
         {
             if (!ModelState.IsValid)
             {
-               return BadRequest();
+                return BadRequest();
             }
 
             var customer = _mapper.Map<Customer>(customerDto);
