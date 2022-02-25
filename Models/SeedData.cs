@@ -85,8 +85,8 @@ namespace LibApp.Models
                      AuthorName = "J.K Rowling",
                      GenreId = 1,
                      DateAdded = new DateTime(),
-                     NumberAvailable = 57,
-                     NumberInStock = 77,
+                     NumberAvailable = 17,
+                     NumberInStock = 18,
                      ReleaseDate = new DateTime(1997, 7, 15)
                  },
                  new Book
