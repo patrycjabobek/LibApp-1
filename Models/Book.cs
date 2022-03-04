@@ -16,9 +16,7 @@ namespace LibApp.Models
 		public string AuthorName { get; set; }
 		[Required(ErrorMessage = "Genre is required")]
 		public Genre Genre { get; set; }
-		[Required(ErrorMessage = "GenreId is required")]
 		public byte GenreId { get; set; }
-		[Required(ErrorMessage = "DateAdded is required")]
 		public DateTime DateAdded { get; set; }
 		[Required(ErrorMessage = "ReleaseDate is required")]
 		public DateTime ReleaseDate { get; set; }

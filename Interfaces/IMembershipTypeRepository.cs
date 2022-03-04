@@ -6,14 +6,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+
 namespace LibApp.Interfaces
 {
-    public interface IBookRepository
+    public interface IMembershipTypeRepository
     {
-        IEnumerable<Book> GetAll();
-        Book GetById(int id);
-        public void Add(Book book);
-        public void Update(Book book);
+        IEnumerable<MembershipType> GetAll();
+        MembershipType GetById(int id);
+        public void Add(MembershipType membershipType);
+        public void Update(MembershipType membershipType);
         public void Delete(int id);
         public void Save();
     }

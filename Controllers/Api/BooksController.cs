@@ -13,7 +13,10 @@ using System.Web.Http;
 using HttpDeleteAttribute = Microsoft.AspNetCore.Mvc.HttpDeleteAttribute;
 using HttpGetAttribute = Microsoft.AspNetCore.Mvc.HttpGetAttribute;
 using RouteAttribute = Microsoft.AspNetCore.Mvc.RouteAttribute;
-
+using HttpPostAttribute = Microsoft.AspNetCore.Mvc.HttpPostAttribute;
+using HttpPutAttribute = Microsoft.AspNetCore.Mvc.HttpPutAttribute;
+using LibApp.Interfaces;
+using System.Net;
 
 namespace LibApp.Controllers.Api
 {
@@ -21,48 +24,75 @@ namespace LibApp.Controllers.Api
     [ApiController]
     public class BooksController : ControllerBase
     {
-        public BooksController(ApplicationDbContext context, IMapper mapper)
+        private readonly IBookRepository _bookRepository;
+
+        public BooksController(IBookRepository bookRepository, IMapper mapper)
         {
-            _context = context;
+            _bookRepository = bookRepository;
             _mapper = mapper;
+
         }
 
         // GET /api/books
         [HttpGet]
-        public IActionResult GetBooks(string query = null)
+        public IActionResult GetBooks()
         {
-            var booksQuery = _context.Books
-                .Include(b => b.Genre)
-                .Where(b => b.NumberAvailable > 0);
+            var books = _bookRepository.GetAll()
+                .Select(_mapper.Map<Book, BookDto>);
+            return Ok(books);
+        }
 
-            if (!String.IsNullOrWhiteSpace(query))
+        //Get /api/book/{id}
+        [HttpGet]
+        [Route("{id}")]
+        public IActionResult GetBook(int id)
+        {
+            var book = _bookRepository.GetById(id);
+
+                if (book == null)
+                {
+                    throw new HttpResponseException(HttpStatusCode.NotFound);
+                }
+
+            return Ok(_mapper.Map<BookDto>(book));
+        }
+
+        [HttpPost]
+        public void AddBook(Book book)
+        {
+            _bookRepository.Add(book);
+        }
+
+        [HttpPut("{id}")]
+        public void Update(int id, BookDto bookDto)
+        {
+            if (!ModelState.IsValid)
             {
-                booksQuery = booksQuery.Where(b => b.Name.Contains(query));
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
             }
-
-            var booksDtos = booksQuery
-                                .ToList()
-                                .Select(_mapper.Map<Book, BookDto>);
-
-            return Ok(booksDtos);
-
+            var bookInDb = _bookRepository.GetById(id);
+            if (bookInDb == null)
+            {
+                throw new HttpResponseException(HttpStatusCode.NotFound);
+            }
+            _mapper.Map(bookDto, bookInDb);
+            _bookRepository.Save();
         }
 
         // DELETE /api/books
         [HttpDelete("{id}")]
-        public void DeleteBook(int id)
+        [Route("{id}")]
+        public IActionResult DeleteBook(int id)
         {
-            var bookInDb = _context.Books.SingleOrDefault(c => c.Id == id);
-            if (bookInDb == null)
+            if (_bookRepository.GetById(id) == null)
             {
-                throw new HttpResponseException(System.Net.HttpStatusCode.NotFound);
+                return NotFound();
             }
-
-            _context.Books.Remove(bookInDb);
-            _context.SaveChanges();
+            _bookRepository.Delete(id);
+            _bookRepository.Save();
+            return Ok();
         }
 
-        private ApplicationDbContext _context;
         private IMapper _mapper;
     }
 }

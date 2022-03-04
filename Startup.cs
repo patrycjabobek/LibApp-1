@@ -14,7 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using LibApp.Repositories.Interfaces;
+using LibApp.Interfaces;
 
 namespace LibApp
 {
@@ -43,6 +43,8 @@ namespace LibApp
 
             services.AddScoped<IBookRepository, BookRepository>();
             services.AddScoped<IGenreRepository, GenreRepository>();
+            services.AddScoped<IMembershipTypeRepository, MembershipTypeRepository>();
+            services.AddScoped<ICustomerRepository, CustomerRepository>();
             services.AddControllersWithViews();
 
 

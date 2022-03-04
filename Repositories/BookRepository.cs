@@ -7,18 +7,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using LibApp.Repositories.Interfaces;
+using LibApp.Interfaces;
 
 namespace LibApp.Repositories
 {
     public class BookRepository : IBookRepository
     {
         protected ApplicationDbContext context;
-        protected IMapper mapper;
-        public BookRepository(ApplicationDbContext context, IMapper mapper)
+        public BookRepository(ApplicationDbContext context)
         {
             this.context = context;
-            this.mapper = mapper;
         }
         public IEnumerable<Book> GetAll()
         {
@@ -26,7 +24,7 @@ namespace LibApp.Repositories
         }
         public Book GetById(int id) => context.Books.Include(b => b.Genre).SingleOrDefault(c => c.Id == id);
         public void Add(Book book) => context.Books.Add(book);
-        public void Update(BookDto book) => context.Books.Update(mapper.Map(book, GetById(book.Id)));
+        public void Update(Book book) => context.Books.Update(book);
         public void Delete(int id) => context.Books.Remove(GetById(id));
         public void Save() => context.SaveChanges();
     }
