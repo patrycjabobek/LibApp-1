@@ -47,6 +47,7 @@
                         data: "id",
                         render: function (data) {
                             return "<button class = 'btn btn-secondary js-delete' data-customer-id=" + data + ">Delete</button>";
+
                         }
                     }
                 ]
@@ -59,6 +60,7 @@
             var table = $("#books").DataTable();
             $("#books").on("click", ".js-delete", function () {
                 var button = $(this);
+
                 bootbox.confirm({
                     message: "Confirm book deletion?",
                     buttons: {

@@ -35,6 +35,7 @@ namespace LibApp.Controllers.Api
 
         // GET /api/books
         [HttpGet]
+        [Authorize]
         public IActionResult GetBooks()
         {
             var books = _bookRepository.GetAll()
@@ -45,6 +46,7 @@ namespace LibApp.Controllers.Api
         //Get /api/book/{id}
         [HttpGet]
         [Route("{id}")]
+        [Authorize(Roles = "StoreManager, Owner")]
         public IActionResult GetBook(int id)
         {
             var book = _bookRepository.GetById(id);
@@ -58,12 +60,14 @@ namespace LibApp.Controllers.Api
         }
 
         [HttpPost]
+        [Authorize(Roles = "StoreManager, Owner")]
         public void AddBook(Book book)
         {
             _bookRepository.Add(book);
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "StoreManager, Owner")]
         public void Update(int id, BookDto bookDto)
         {
             if (!ModelState.IsValid)
@@ -82,6 +86,7 @@ namespace LibApp.Controllers.Api
         // DELETE /api/books
         [HttpDelete("{id}")]
         [Route("{id}")]
+        [Authorize(Roles = "StoreManager, Owner")]
         public IActionResult DeleteBook(int id)
         {
             if (_bookRepository.GetById(id) == null)

@@ -21,23 +21,6 @@ namespace LibApp.Controllers
             _bookRepository = bookRepository;
             _genreRepository = genreRepository;
         }
-
-        public IActionResult Index()
-        {
-            var books = _bookRepository.GetAll()
-                .ToList();
-
-            return View(books);
-        }
-
-        public IActionResult Details(int id)
-        {
-            var book = _bookRepository.GetAll()
-              .SingleOrDefault(b => b.Id == id);
-
-            return View(book);
-        }
-
         public IActionResult Edit(int id)
         {
             var book = _bookRepository.GetById(id);
@@ -55,7 +38,6 @@ namespace LibApp.Controllers
 
             return View("BookForm", viewModel);
         }
-
         public IActionResult New()
         {
             var viewModel = new BookFormViewModel
@@ -82,7 +64,7 @@ namespace LibApp.Controllers
                 bookInDb.AuthorName = book.AuthorName;
                 bookInDb.GenreId = book.GenreId;
                 bookInDb.ReleaseDate = book.ReleaseDate;
-                //bookInDb.DateAdded = book.DateAdded;
+                bookInDb.DateAdded = book.DateAdded;
                 bookInDb.NumberInStock = book.NumberInStock;
             }
             try
@@ -96,6 +78,24 @@ namespace LibApp.Controllers
 
             return RedirectToAction("Index", "Books");
         }
+
+
+        public IActionResult Index()
+        {
+            var books = _bookRepository.GetAll()
+                .ToList();
+
+            return View(books);
+        }
+
+        public IActionResult Details(int id)
+        {
+            var book = _bookRepository.GetAll()
+              .SingleOrDefault(b => b.Id == id);
+
+            return View(book);
+        }
+
 
 
     }
